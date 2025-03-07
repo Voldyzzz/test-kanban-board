@@ -1,0 +1,16 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+.loadRepoData__wrapper {
+  display: flex;
+  max-width: 1024px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 20px;
+
+  & input {
+    width: 820px;
+    height: 38px;
+    border-radius: 4px;
+  }
+}
