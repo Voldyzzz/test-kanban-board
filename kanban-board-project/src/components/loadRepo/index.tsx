@@ -1,34 +1,70 @@
 import { Button } from "react-bootstrap";
 import "./index.scss";
-import { getStargazersCount } from "../../services/getData";
-import { Repo } from "../../types/types";
+import { getIssuesData, getStargazersCount } from "../../services/getData";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateData } from "../../store/dataRepoSlice";
+import RepoInfo from "./RepoInfo";
 
 const LoadRepo = () => {
+  const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
+
+  const extractOwnerAndRepo = (
+    url: string
+  ): { owner: string; repository: string } | null => {
+    const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/?$/);
+
+    if (match) {
+      return { owner: match[1], repository: match[2] };
+    } else {
+      console.error("Invalid GitHub repository URL");
+      return null;
+    }
+  };
+
   async function fetchData() {
-    const obj: Repo = {
-      owner: "facebook",
-      repository: "react",
-    };
+    const repoInfo = extractOwnerAndRepo(inputValue);
+
+    if (!repoInfo) {
+      console.log(console.error("Invalid Repository info"));
+      return;
+    }
 
     try {
-      const data = await getStargazersCount(obj);
-      console.log(data.stargazers_count);
+      const repositoryData = await getStargazersCount(repoInfo);
+      dispatch(
+        updateData({ ...repoInfo, stargazers: repositoryData.stargazers_count })
+      );
+      const issuesData = await getIssuesData(repoInfo);
+      console.log(issuesData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
 
   const handleClick = () => {
-    fetchData();
+    if (inputValue) fetchData();
+  };
+
+  const handleChangeInput = (e: any) => {
+    setInputValue(e.target.value);
   };
 
   return (
-    <div className="loadRepoData__wrapper">
-      <input type="text" placeholder="Enter repo URL" />
-      <Button onClick={handleClick} variant="outline-dark">
-        Load issues
-      </Button>
-    </div>
+    <>
+      <div className="loadRepoData__wrapper">
+        <input
+          type="text"
+          placeholder="Enter repo URL"
+          onChange={handleChangeInput}
+        />
+        <Button onClick={handleClick} variant="outline-dark">
+          Load issues
+        </Button>
+      </div>
+      <RepoInfo url={inputValue} />
+    </>
   );
 };
 

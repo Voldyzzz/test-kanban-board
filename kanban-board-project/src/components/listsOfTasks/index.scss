@@ -1,0 +1,41 @@
+.listOfIssues__wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+
+  .listOfIssues__wrapper__block {
+    text-align: center;
+    width: 300px;
+
+    .titleOfList {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .listOfIssues {
+      margin: 15px 0 0 0;
+      padding: 15px;
+      height: 1000px;
+      background-color: rgb(193, 196, 201);
+      border: 1px solid black;
+
+      &__item {
+        display: flex;
+        flex-direction: column;
+        color: rgb(49, 47, 47);
+        letter-spacing: 1.5px;
+        align-items: flex-start;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 22px;
+
+        &-title {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}

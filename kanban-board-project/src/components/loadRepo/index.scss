@@ -14,3 +14,33 @@
     border-radius: 4px;
   }
 }
+
+.loadRepoData__info {
+  display: flex;
+  padding: 0 20px;
+
+  &-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-right: 20px;
+    transition: color 0.3s ease;
+
+    p {
+      margin: 0;
+    }
+
+    i {
+      margin: 0 5px;
+    }
+  }
+
+  &-link:hover {
+    color: rgb(15, 53, 242);
+  }
+
+  span {
+    margin-left: 5px;
+  }
+}
