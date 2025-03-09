@@ -11,7 +11,7 @@ export const getIssuesData = async (repoInfo: Repo) => {
       throw new Error("Failed to fetch issues");
     }
     const data = await response.json();
-    return data;
+    return data.slice(0, 10);
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

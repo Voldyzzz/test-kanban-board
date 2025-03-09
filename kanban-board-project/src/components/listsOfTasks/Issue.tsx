@@ -1,15 +1,27 @@
-import React from "react";
+import { RepoData } from "../../types/types";
+import formatTime from "../../utility/formatTime";
 
-type Props = {};
+type Props = {
+  number: number;
+  title: string;
+  state: string;
+  comments: number;
+  updated_at: string;
+  user: string;
+};
 
-const Issue = (props: Props) => {
+const Issue = ({ number, title, state, comments, updated_at, user }: Props) => {
   return (
     <li className="listOfIssues__item">
-      <p className="listOfIssues__item-title">Some issue title</p>
-      <p className="listOfIssues__item-number-date">#777 opened 3 days ago</p>
+      <p className="listOfIssues__item-title">{title}</p>
+      <p className="listOfIssues__item-number-date">{`${
+        "#" + number + "    " + formatTime(updated_at)
+      }`}</p>
       <div className="listOfIssues__item__info">
-        <span className="listOfIssues__item__info-author">Admin |</span>
-        <span className="listOfIssues__item__info-comments"> Comments: 2</span>
+        <span className="listOfIssues__item__info-author">{user} |</span>
+        <span className="listOfIssues__item__info-comments">
+          {`  Comments: ${comments}`}
+        </span>
       </div>
     </li>
   );

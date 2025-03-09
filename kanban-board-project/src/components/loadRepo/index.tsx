@@ -1,27 +1,13 @@
+import { useState } from "react";
 import { Button } from "react-bootstrap";
 import "./index.scss";
-import { getIssuesData, getStargazersCount } from "../../services/getData";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateData } from "../../store/dataRepoSlice";
+import extractOwnerAndRepo from "../../utility/parseRepoUrl";
 import RepoInfo from "./RepoInfo";
+import useLoadDataToPage from "../../hooks/useLoadDataToPage";
 
 const LoadRepo = () => {
   const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch();
-
-  const extractOwnerAndRepo = (
-    url: string
-  ): { owner: string; repository: string } | null => {
-    const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/?$/);
-
-    if (match) {
-      return { owner: match[1], repository: match[2] };
-    } else {
-      console.error("Invalid GitHub repository URL");
-      return null;
-    }
-  };
+  const loadDataToPage = useLoadDataToPage();
 
   async function fetchData() {
     const repoInfo = extractOwnerAndRepo(inputValue);
@@ -31,20 +17,14 @@ const LoadRepo = () => {
       return;
     }
 
-    try {
-      const repositoryData = await getStargazersCount(repoInfo);
-      dispatch(
-        updateData({ ...repoInfo, stargazers: repositoryData.stargazers_count })
-      );
-      const issuesData = await getIssuesData(repoInfo);
-      console.log(issuesData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    loadDataToPage(repoInfo);
   }
 
   const handleClick = () => {
-    if (inputValue) fetchData();
+    if (inputValue) {
+      fetchData();
+      setInputValue("");
+    }
   };
 
   const handleChangeInput = (e: any) => {
@@ -56,6 +36,7 @@ const LoadRepo = () => {
       <div className="loadRepoData__wrapper">
         <input
           type="text"
+          value={inputValue}
           placeholder="Enter repo URL"
           onChange={handleChangeInput}
         />

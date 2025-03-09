@@ -16,7 +16,8 @@
     .listOfIssues {
       margin: 15px 0 0 0;
       padding: 15px;
-      height: 1000px;
+      min-height: 70vh;
+      height: auto;
       background-color: rgb(193, 196, 201);
       border: 1px solid black;
 
@@ -33,6 +34,7 @@
         border-radius: 22px;
 
         &-title {
+          text-align: left;
           font-weight: 700;
         }
       }

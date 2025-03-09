@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import DataRepoSlice from "./dataRepoSlice";
+import ListOfIssuesSlice from "./listOfIssuesSlice";
 
 const store = configureStore({
   reducer: {
     DataRepoSlice,
+    ListOfIssuesSlice,
   },
 });
 
