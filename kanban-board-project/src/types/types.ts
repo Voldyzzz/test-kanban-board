@@ -12,3 +12,8 @@ export type RepoData = {
   updated_at: string;
   user: string;
 };
+
+export type ListStatus = {
+  id: string;
+  title: string;
+};

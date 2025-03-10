@@ -1,26 +1,38 @@
+import { useDraggable } from "@dnd-kit/core";
 import { RepoData } from "../../types/types";
 import formatTime from "../../utility/formatTime";
 
 type Props = {
-  number: number;
-  title: string;
-  state: string;
-  comments: number;
-  updated_at: string;
-  user: string;
+  issue: RepoData;
 };
 
-const Issue = ({ number, title, state, comments, updated_at, user }: Props) => {
+const Issue = ({ issue }: Props) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: issue.id,
+  });
+
+  const style = transform
+    ? {
+        transform: `translate(${transform.x}px, ${transform.y}px)`,
+      }
+    : undefined;
+
   return (
-    <li className="listOfIssues__item">
-      <p className="listOfIssues__item-title">{title}</p>
+    <li
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="listOfIssues__item"
+      style={style}
+    >
+      <p className="listOfIssues__item-title">{issue.title}</p>
       <p className="listOfIssues__item-number-date">{`${
-        "#" + number + "    " + formatTime(updated_at)
+        "#" + issue.number + "    " + formatTime(issue.updated_at)
       }`}</p>
       <div className="listOfIssues__item__info">
-        <span className="listOfIssues__item__info-author">{user} |</span>
+        <span className="listOfIssues__item__info-author">{issue.user} |</span>
         <span className="listOfIssues__item__info-comments">
-          {`  Comments: ${comments}`}
+          {`  Comments: ${issue.comments}`}
         </span>
       </div>
     </li>
