@@ -20,9 +20,25 @@ const ListOfIssues = () => {
     if (!over) return;
 
     const issueId = active.id as number;
-    const newState = over.id as RepoData["state"];
+    let newState = over.id as RepoData["state"];
+    let newOrder: number | undefined;
+    let currentOrder: number | undefined;
 
-    dispatch(updateIssues({ issueId, newState, idOfRepository }));
+    if (String(over.id).startsWith("issue")) {
+      newOrder = over.data.current?.order;
+      newState = over.data.current?.state;
+      currentOrder = active.data.current?.order;
+    }
+
+    dispatch(
+      updateIssues({
+        issueId,
+        newState,
+        newOrder,
+        currentOrder,
+        idOfRepository,
+      })
+    );
   }
 
   return (

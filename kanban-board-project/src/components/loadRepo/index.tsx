@@ -7,6 +7,7 @@ import useLoadDataToPage from "../../hooks/useLoadDataToPage";
 
 const LoadRepo = () => {
   const [inputValue, setInputValue] = useState("");
+  const [repoUrl, setRepoUrl] = useState("");
   const loadDataToPage = useLoadDataToPage();
 
   async function fetchData() {
@@ -17,6 +18,7 @@ const LoadRepo = () => {
       return;
     }
 
+    setRepoUrl(inputValue);
     loadDataToPage(repoInfo);
   }
 
@@ -44,7 +46,7 @@ const LoadRepo = () => {
           Load issues
         </Button>
       </div>
-      <RepoInfo url={inputValue} />
+      <RepoInfo url={repoUrl} />
     </>
   );
 };

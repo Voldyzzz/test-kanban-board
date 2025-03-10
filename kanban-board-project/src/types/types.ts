@@ -8,6 +8,7 @@ export type RepoData = {
   number: number;
   title: string;
   state: string;
+  order: number;
   comments: number;
   updated_at: string;
   user: string;

@@ -23,15 +23,18 @@ const useLoadDataToPage = () => {
             })
           );
           const issuesData = await getIssuesData(repoInfo);
-          const repoDataArray: RepoData[] = issuesData.map((item: any) => ({
-            id: item.id,
-            number: item.number,
-            title: item.title,
-            state: item.state,
-            comments: item.comments,
-            updated_at: item.updated_at,
-            user: item.user.login,
-          }));
+          const repoDataArray: RepoData[] = issuesData.map(
+            (item: any, index: number) => ({
+              id: item.id,
+              number: item.number,
+              title: item.title,
+              state: item.state,
+              order: index + 1,
+              comments: item.comments,
+              updated_at: item.updated_at,
+              user: item.user.login,
+            })
+          );
 
           dispatch(addIssues({ issues: repoDataArray }));
           setLocalStorage(`repo_${repositoryData.id}`, {

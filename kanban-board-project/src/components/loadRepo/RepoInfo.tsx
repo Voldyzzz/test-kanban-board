@@ -11,6 +11,8 @@ const RepoInfo = ({ url }: Props) => {
     (state: RootState) => state.DataRepoSlice
   );
 
+  console.log(url);
+
   return (
     <>
       {owner ? (

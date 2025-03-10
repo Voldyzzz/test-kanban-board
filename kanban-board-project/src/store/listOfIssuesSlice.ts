@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RepoData } from "../types/types";
 import { getLocalStorage, setLocalStorage } from "../services/localStorage";
+import sortIssues from "../utility/sortIssues";
 
 interface ListOfIssuesState {
   issues: RepoData[];
@@ -26,7 +27,10 @@ const ListOfIssuesSlice = createSlice({
         issues: RepoData[];
       }>
     ) => {
-      state.issues = action.payload.issues;
+      state.issues = action.payload.issues.map((issue) => ({
+        ...issue,
+      }));
+
       state.toDo = action.payload.issues.filter(
         (issue) => issue.state === "open"
       );
@@ -42,20 +46,40 @@ const ListOfIssuesSlice = createSlice({
       action: PayloadAction<{
         issueId: number;
         newState: RepoData["state"];
+        newOrder?: number;
+        currentOrder?: number;
         idOfRepository: number;
       }>
     ) => {
-      state.issues = state.issues.map((issue) =>
-        issue.id === action.payload.issueId
-          ? { ...issue, state: action.payload.newState }
-          : issue
-      );
+      state.issues = state.issues.map((issue) => {
+        if (issue.order === action.payload.newOrder) {
+          issue.order = action.payload.currentOrder
+            ? action.payload.currentOrder
+            : issue.order;
+        }
 
-      state.toDo = state.issues.filter((issue) => issue.state === "open");
-      state.inProgress = state.issues.filter(
-        (issue) => issue.state === "inProgress"
-      );
-      state.done = state.issues.filter((issue) => issue.state === "done");
+        if (issue.id === action.payload.issueId) {
+          return {
+            ...issue,
+            state: action.payload.newState,
+            order:
+              action.payload.newOrder !== undefined
+                ? action.payload.newOrder
+                : issue.order,
+          };
+        }
+        return issue;
+      });
+
+      state.toDo = state.issues
+        .filter((issue) => issue.state === "open")
+        .sort(sortIssues);
+      state.inProgress = state.issues
+        .filter((issue) => issue.state === "inProgress")
+        .sort(sortIssues);
+      state.done = state.issues
+        .filter((issue) => issue.state === "done")
+        .sort(sortIssues);
 
       const repo: {} | null = getLocalStorage(
         `repo_${action.payload.idOfRepository}`

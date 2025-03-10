@@ -1,4 +1,4 @@
-import { useDraggable } from "@dnd-kit/core";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { RepoData } from "../../types/types";
 import formatTime from "../../utility/formatTime";
 
@@ -9,6 +9,12 @@ type Props = {
 const Issue = ({ issue }: Props) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: issue.id,
+    data: { order: issue.order, state: issue.state },
+  });
+
+  const { setNodeRef: setDroppableRef } = useDroppable({
+    id: `issue-${issue.id}`,
+    data: { order: issue.order, state: issue.state },
   });
 
   const style = transform
@@ -19,7 +25,10 @@ const Issue = ({ issue }: Props) => {
 
   return (
     <li
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        setDroppableRef(node);
+      }}
       {...listeners}
       {...attributes}
       className="listOfIssues__item"
